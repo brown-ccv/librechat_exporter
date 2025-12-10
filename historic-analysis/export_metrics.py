@@ -4,11 +4,13 @@ import pymongo
 from collections import defaultdict
 import argparse
 import sys
+import os
 
 # Database connections
 try:
+    mongo_uri = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
     mongo_client = pymongo.MongoClient(
-        "mongodb://localhost:27017/",
+        mongo_uri,
         readPreference='secondary',  # Prefer reading from secondary node
     )
     # Test the connection
@@ -20,11 +22,11 @@ except Exception as e:
 
 mongo_db = mongo_client["LibreChat"]
 mysql_config = {
-    'host': 'localhost',
-    'user': 'metrics',
-    'password': 'metrics',
-    'database': 'metrics',
-    'port': 3306
+    'host': os.environ.get('MYSQL_HOST', 'localhost'),
+    'user': os.environ.get('MYSQL_USER', 'metrics'),
+    'password': os.environ.get('MYSQL_PASSWORD', 'metrics'),
+    'database': os.environ.get('MYSQL_DATABASE', 'metrics'),
+    'port': int(os.environ.get('MYSQL_PORT', 3306))
 }
 
 def get_mysql_connection():
