@@ -20,7 +20,7 @@ except Exception as e:
     print(f"Failed to connect to MongoDB: {e}")
     sys.exit(1)
 
-mongo_db = mongo_client["LibreChat"]
+mongo_db = mongo_client[os.environ.get("MONGO_DATABASE", "LibreChat")]
 mysql_config = {
     'host': os.environ.get('MYSQL_HOST', 'localhost'),
     'user': os.environ.get('MYSQL_USER', 'metrics'),
